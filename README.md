@@ -22,6 +22,63 @@ System requirements
     so it is recommended to have at least 1 GB of memory available when compiling Hdac.
 
 
+Linux BUILD ( on Debian 9 Stretch x64 )
+-----------
+
+  1. Install dependencies
+    
+    sudo apt-get update
+    sudo apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils
+    sudo apt-get install libboost-all-dev
+    sudo apt-get install git
+    sudo apt-get install software-properties-common
+    sudo apt-get install libminiupnpc-dev
+    sudo apt-get install libzmq3-dev
+
+  2. Build Berkeley DB 4.8 from source:
+     
+     wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
+     tar -xzvf db-4.8.30.NC.tar.gz
+     cd db-4.8.30.NC/build_unix/
+     ../dist/configure --enable-cxx
+     make
+     sudo make install
+     
+  3. Add environment variables:
+     
+     nano ~/.bashrc, and add these two lines:
+     export BDB\_INCLUDE\_PATH="/usr/local/BerkeleyDB.4.8/include"
+     export BDB\_LIB\_PATH="/usr/local/BerkeleyDB.4.8/lib"
+     
+  4. Create symbolic link to Berkeley DB 4.8:
+     
+     ln -s /usr/local/BerkeleyDB.4.8/lib/libdb-4.8.so /usr/lib/libdb-4.8.so
+
+  5. Compile Hdac for Debian Stretch (64-bit)
+    
+    export CPPFLAGS="$CPPFLAGS -I/usr/local/BerkeleyDB.4.8/include/"
+    export LDFLAGS="$LDFLAGS -L/usr/local/BerkeleyDB.4.8/lib/"
+    ./build.sh
+    
+  6. If you are having trouble compiling, please try below
+
+    ./clean.sh
+    ./autogen.sh
+    ./configure
+    make
+   
+  7. run 
+
+   This will build `hdacd`, `hdac-cli` and `hdac-util` in the `src` directory.
+
+   The release is built with GCC after which `strip hdacd` strings the debug symbols, 
+   which reduces the executable size by about 90%.
+
+  8. Clean build
+
+    ./clean.sh
+
+
 Linux BUILD ( on Ubuntu 16.04 x64 )
 -----------
 
