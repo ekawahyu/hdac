@@ -52,7 +52,7 @@ Linux BUILD ( on Debian 9 Stretch x64 )
      
   4. Create symbolic link to Berkeley DB 4.8:
      
-    ln -s /usr/local/BerkeleyDB.4.8/lib/libdb-4.8.so /usr/lib/libdb-4.8.so
+    sudo ln -s /usr/local/BerkeleyDB.4.8/lib/libdb-4.8.so /usr/lib/libdb-4.8.so
 
   5. Compile Hdac for Debian Stretch (64-bit)
     
@@ -60,12 +60,14 @@ Linux BUILD ( on Debian 9 Stretch x64 )
     export LDFLAGS="$LDFLAGS -L/usr/local/BerkeleyDB.4.8/lib/"
     ./build.sh
     
-  6. If you are having trouble compiling, please try below
+  6. If you are having trouble compiling with `libboost_system`, please try below
 
     ./clean.sh
     ./autogen.sh
-    ./configure
+    ./configure --with-boost-libdir=/usr/lib/i386-linux-gnu
     make
+    
+     Depending on where `libboost_system` is installed, on 32-bit: `/usr/lib/i386-linux-gnu`, on 64-bit: `/usr/lib/x86_64-linux-gnu`
    
   7. run 
 
